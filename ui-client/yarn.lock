@@ -1598,6 +1598,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@okteto/react-oauth2-login@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@okteto/react-oauth2-login/-/react-oauth2-login-1.1.1.tgz#fee585b838293838d6ab8f1802a3bc8da94eacba"
+  integrity sha512-iYXbytfLFrf3mlL8HFlo4piQRtrzD867ke0arXa6qXpMyJcqid4xBssIZDrbIeYpQSX/e0RyD+SkDYsq0xe6Gw==
+
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.10"
   resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.10.tgz#2eba163b8e7dbabb4ce3609ab5e32ab63dda3ef8"

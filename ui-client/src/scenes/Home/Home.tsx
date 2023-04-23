@@ -8,7 +8,6 @@ const Home = () => {
         <styled.BottomDiv>
           <styled.InnerDiv>
             <styled.BottomTitle>Issue tracking app</styled.BottomTitle>
-
             <styled.ButtonContainer></styled.ButtonContainer>
           </styled.InnerDiv>
         </styled.BottomDiv>

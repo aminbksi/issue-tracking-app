@@ -2,12 +2,13 @@ import { FC } from "react";
 import { useHistory } from "react-router-dom";
 import { ROUTES } from "core";
 import * as styled from "./Navbar.styled";
+import { GithubLogin } from "scenes/Github/pages";
 
 interface PropsInterface {
-  onSearch?: () => void;
+  onLogin?: () => void;
 }
 
-const Navbar: FC<PropsInterface> = () => {
+const Navbar: FC<PropsInterface> = ({ onLogin }) => {
   const history = useHistory();
   return (
     <styled.NavContainer>
@@ -18,6 +19,8 @@ const Navbar: FC<PropsInterface> = () => {
         >
           Home
         </styled.HomeButton>
+
+        <GithubLogin />
       </styled.LeftContainer>
     </styled.NavContainer>
   );

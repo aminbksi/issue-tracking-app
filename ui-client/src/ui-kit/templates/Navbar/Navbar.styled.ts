@@ -16,7 +16,7 @@ export const NavContainer = styled.div`
 
 export const LeftContainer = styled.div`
   display: flex;
-  width: 510px;
+  width: 610px;
   gap: 30px;
   align-items: center;
   padding-right: 15px;
