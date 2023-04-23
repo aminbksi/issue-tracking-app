@@ -16,6 +16,21 @@ const GithubStore = types
       if (!accessToken) return;
       self.accessToken = accessToken;
     },
+    getUser: async () => {
+      const requestHeaders = {
+        headers: {
+          Authorization: "Bearer " + self.accessToken,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      };
+      await axios
+        .get("http://localhost:3001/api/user", requestHeaders)
+        .then((response) => {
+          console.log(response);
+        });
+    },
   }))
   .actions((self) => ({
     getAccessToken: async (code: string) => {
@@ -29,6 +44,8 @@ const GithubStore = types
           refreshAxiosToken(response.data.accessToken);
           self.setAccessToken(response.data.accessToken);
         });
+
+      //   self.getUser();
     },
     logout() {
       self.accessToken = "";

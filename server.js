@@ -26,9 +26,23 @@ app.get("/api/getAccessToken", async (req, res) => {
       },
     })
     .then((response) => {
+      console.log(response);
       const searchParams = new URLSearchParams(response.data);
       const accessToken = searchParams.get("access_token");
       res.send(JSON.stringify({ accessToken }));
+    });
+});
+
+app.get("/api/getUser", async (req, res) => {
+  const requestHeaders = {
+    headers: {
+      Authorization: req.get("Authorization"),
+    },
+  };
+  await axios
+    .get("https://api.github.com/user", requestHeaders)
+    .then((response) => {
+      console.log(response.data);
     });
 });
 
