@@ -9,11 +9,12 @@ interface PropsInterface {
 }
 
 const AppLayers: FC<PropsInterface> = ({ children }) => {
+  const handleLoginGithub = () => {};
   return (
     <div>
       <main id="main">
         <div className="main-content">{children}</div>
-        <Navbar />
+        <Navbar onLogin={handleLoginGithub} />
       </main>
       <Footer />
     </div>
