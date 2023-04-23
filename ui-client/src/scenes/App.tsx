@@ -1,12 +1,18 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { GlobalStyles } from "./App.styled";
 import AppLayer from "./AppLayer";
 import { ROUTES, createSwitchByConfig, isTargetRoute } from "core";
 import { PUBLIC_ROUTES } from "./App.routes";
 import { useLocation } from "react-router-dom";
+import { useStore } from "shared";
 
 function App() {
+  const { githubStore } = useStore();
   const { pathname } = useLocation<{ pathname: string }>();
+
+  useEffect(() => {
+    githubStore.init();
+  }, [githubStore]);
 
   if (isTargetRoute(pathname, PUBLIC_ROUTES)) {
     return (

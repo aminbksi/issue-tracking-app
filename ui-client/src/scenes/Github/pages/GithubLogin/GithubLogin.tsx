@@ -1,10 +1,11 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { observer } from "mobx-react-lite";
-import PopupWindow from "./components/PopupWindow/PopupWindow";
 import { toQuery, githubConfig } from "core";
+import React from "react";
+import { useStore } from "shared";
 
 import * as styled from "./GithubLogin.styled";
-import React from "react";
+import PopupWin from "./components/PopupWindow/PopupWin";
 
 const popupHeight = 650;
 const popupWidth = 500;
@@ -13,22 +14,12 @@ interface PropsInterface {
   disabled?: boolean;
 }
 const GithubLogin: FC<PropsInterface> = (props) => {
+  const { githubStore } = useStore();
   const { disabled = false } = props;
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-
-  const handleSuccess = (data: any) => {
-    if (!data.code) {
-      return handleFailure(new Error("'code' not found"));
-    }
-
-    console.log(data);
-    setLoggedIn(true);
-  };
 
   const handleLogout = () => {
-    setLoggedIn(false);
+    githubStore.logout();
   };
-  const handleFailure = (error: any) => {};
 
   const handleLogin = () => {
     const query = toQuery({
@@ -45,7 +36,7 @@ const GithubLogin: FC<PropsInterface> = (props) => {
     const left =
       window.top.outerWidth / 2 + window.top.screenX - popupWidth / 2;
 
-    const popup = PopupWindow.open(
+    const popup = PopupWin.open(
       "github-oauth-authorize",
       `https://github.com/login/oauth/authorize?${query}`,
       {
@@ -57,14 +48,16 @@ const GithubLogin: FC<PropsInterface> = (props) => {
     );
 
     popup.then(
-      (data: any) => handleSuccess(data),
-      (error: any) => handleFailure(error)
+      (data: any) => githubStore.getAccessToken(data.code),
+      (error: any) => {
+        throw new Error(error);
+      }
     );
   };
 
   return (
     <React.Fragment>
-      {!loggedIn ? (
+      {!githubStore.accessToken ? (
         <styled.LoginButton
           disabled={disabled}
           className=""

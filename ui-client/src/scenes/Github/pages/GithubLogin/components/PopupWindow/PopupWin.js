@@ -1,13 +1,7 @@
 import { toParams, toQuery } from "core";
 
-class PopupWindow {
-  id: string;
-  url: string;
-  options: {};
-  window: Window | null | undefined;
-  promise: Promise<unknown> | undefined;
-  private _iid: number | undefined;
-  constructor(id: string, url: string, options = {}) {
+class PopupWin {
+  constructor(id, url, options = {}) {
     this.id = id;
     this.url = url;
     this.options = options;
@@ -15,12 +9,13 @@ class PopupWindow {
 
   open() {
     const { url, id, options } = this;
+
     this.window = window.open(url, id, toQuery(options, ","));
   }
 
   close() {
     this.cancel();
-    this.window?.close();
+    this.window.close();
   }
 
   poll() {
@@ -62,18 +57,15 @@ class PopupWindow {
   cancel() {
     if (this._iid) {
       window.clearInterval(this._iid);
-      this._iid = undefined;
+      this._iid = null;
     }
   }
 
-  then(
-    onSuccess: ((value: unknown) => unknown) | null | undefined,
-    onFailure: ((reason: any) => void) | null | undefined
-  ) {
-    return this.promise?.then(onSuccess, onFailure);
+  then(onSuccess, onFailure) {
+    return this.promise.then(onSuccess, onFailure);
   }
 
-  static open(id: string, url: string, options: {} | undefined) {
+  static open(id, url, options) {
     const popup = new this(id, url, options);
 
     popup.open();
@@ -83,4 +75,4 @@ class PopupWindow {
   }
 }
 
-export default PopupWindow;
+export default PopupWin;
