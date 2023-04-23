@@ -25,10 +25,12 @@ export const LeftContainer = styled.div`
 
 export const Logo = styled.span`
   display: inline-block;
+  color: #fff;
   padding-top: 0.3125rem;
   padding-bottom: 0.3125rem;
   margin-right: 1rem;
   font-size: 1.25rem;
+  font-weight: 700;
   line-height: inherit;
   white-space: nowrap;
 `;

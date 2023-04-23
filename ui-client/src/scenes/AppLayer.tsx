@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import React, { FC, lazy } from "react";
 
 const Navbar = lazy(() => import("../ui-kit/templates/Navbar/Navbar"));
@@ -19,4 +20,4 @@ const AppLayers: FC<PropsInterface> = ({ children }) => {
   );
 };
 
-export default AppLayers;
+export default observer(AppLayers);

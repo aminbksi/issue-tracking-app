@@ -3,7 +3,9 @@ const Footer = () => {
   return (
     <styled.Container>
       <styled.FooterContainer>
-        <styled.HomeButton>Home</styled.HomeButton>
+        <styled.FooterText>
+          © EngD Software Technology 2023. All rights reserved.{" "}
+        </styled.FooterText>
       </styled.FooterContainer>
     </styled.Container>
   );

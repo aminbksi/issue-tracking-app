@@ -11,6 +11,12 @@ export const Container = styled.div`
   z-index: 5;
 `;
 
+export const FooterText = styled.p`
+  color: white;
+  font-size: 15px;
+  margin: 0 10px;
+`;
+
 export const FooterContainer = styled.footer`
   display: flex;
   justify-content: space-between;

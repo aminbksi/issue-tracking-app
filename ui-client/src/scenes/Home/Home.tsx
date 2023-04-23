@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import * as styled from "./Home.styled";
 
 const Home = () => {
@@ -16,4 +17,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default observer(Home);
