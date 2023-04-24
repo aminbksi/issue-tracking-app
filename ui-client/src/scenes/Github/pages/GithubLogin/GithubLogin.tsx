@@ -1,11 +1,12 @@
 import { FC } from "react";
 import { observer } from "mobx-react-lite";
-import { toQuery, githubConfig } from "core";
+import { toQuery, githubConfig, ROUTES } from "core";
 import React from "react";
 import { useStore } from "shared";
 
 import * as styled from "./GithubLogin.styled";
 import PopupWin from "./components/PopupWindow/PopupWin";
+import { useHistory } from "react-router-dom";
 
 const popupHeight = 650;
 const popupWidth = 500;
@@ -16,9 +17,15 @@ interface PropsInterface {
 const GithubLogin: FC<PropsInterface> = (props) => {
   const { githubStore } = useStore();
   const { disabled = false } = props;
+  const history = useHistory();
 
   const handleLogout = () => {
     githubStore.logout();
+  };
+
+  const handleSucess = async (data: any) => {
+    await githubStore.getAccessToken(data.code);
+    history.push(ROUTES.user);
   };
 
   const handleLogin = () => {
@@ -48,7 +55,7 @@ const GithubLogin: FC<PropsInterface> = (props) => {
     );
 
     popup.then(
-      (data: any) => githubStore.getAccessToken(data.code),
+      (data: any) => handleSucess(data),
       (error: any) => {
         throw new Error(error);
       }

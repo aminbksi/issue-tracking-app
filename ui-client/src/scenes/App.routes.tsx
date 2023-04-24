@@ -9,11 +9,19 @@ export interface RouteConfigInterface {
 }
 
 const Home = lazy(() => import("./Home/Home"));
+const UserHomePage = lazy(
+  () => import("./Github/pages/UserHomePage/UserHomePage")
+);
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
     path: ROUTES.base,
     exact: true,
     main: () => <Home />,
+  },
+  {
+    path: ROUTES.user,
+    exact: true,
+    main: () => <UserHomePage />,
   },
 ];
