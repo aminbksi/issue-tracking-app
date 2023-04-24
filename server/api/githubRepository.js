@@ -1,5 +1,6 @@
 const axios = require("axios");
 const keys = require("../config/dev");
+const userService = require("../services/userService");
 
 module.exports = (app) => {
   app.get("/api/getAccessToken", async (req, res) => {
@@ -16,10 +17,20 @@ module.exports = (app) => {
           code: requestToken,
         },
       })
-      .then((response) => {
+      .then(async (response) => {
         const searchParams = new URLSearchParams(response.data);
         const accessToken = searchParams.get("access_token");
         res.send(JSON.stringify({ accessToken }));
+        const requestHeaders = {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        };
+        await axios
+          .get("https://api.github.com/user", requestHeaders)
+          .then((response) => {
+            console.log(response.data);
+          });
       });
   });
 
@@ -29,10 +40,12 @@ module.exports = (app) => {
         Authorization: req.get("Authorization"),
       },
     };
+
     await axios
       .get("https://api.github.com/user", requestHeaders)
-      .then((response) => {
-        console.log(response.data);
+      .then(async (response) => {
+        const user = await userService.getUser(response.data.login);
+        res.send(user);
       });
   });
 };
