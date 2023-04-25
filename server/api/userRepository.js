@@ -32,4 +32,28 @@ module.exports = (app) => {
         res.send(response.data);
       });
   });
+
+  app.post("/api/repo/issues/label", async (req, res) => {
+    const { owner, repo, label, issue_number } = req.body;
+    console.log(owner, repo, label, issue_number);
+    const requestHeaders = {
+      headers: {
+        Authorization: req.get("Authorization"),
+      },
+    };
+
+    const requestBody = {
+      labels: [label],
+    };
+
+    await axios
+      .post(
+        `https://api.github.com/repos/${owner}/${repo}/issues/${issue_number}/labels`,
+        requestBody,
+        requestHeaders
+      )
+      .then(async (response) => {
+        res.send(response.data);
+      });
+  });
 };

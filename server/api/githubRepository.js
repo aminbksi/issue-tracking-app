@@ -21,16 +21,17 @@ module.exports = (app) => {
         const searchParams = new URLSearchParams(response.data);
         const accessToken = searchParams.get("access_token");
         res.send(JSON.stringify({ accessToken }));
-        const requestHeaders = {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        };
-        await axios
-          .get("https://api.github.com/user", requestHeaders)
-          .then((response) => {
-            console.log(response.data);
-          });
+        //  TODO: FIX get user token access
+        //     const requestHeaders = {
+        //       headers: {
+        //         Authorization: `Bearer ${accessToken}`,
+        //       },
+        //     };
+        //     await axios
+        //       .get("https://api.github.com/user", requestHeaders)
+        //       .then((response) => {
+        //         console.log(response.data);
+        //       });
       });
   });
 

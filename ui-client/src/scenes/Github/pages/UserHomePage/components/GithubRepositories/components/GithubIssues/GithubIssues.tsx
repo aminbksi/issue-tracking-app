@@ -1,9 +1,26 @@
 import { observer } from "mobx-react-lite";
 import * as styled from "./GithubIssues.styled";
 import { useStore } from "shared";
+import { useState } from "react";
+import { CreateLabelDialog } from "ui-kit";
 
 const GithubIssues = () => {
-  const { issueStore } = useStore();
+  const { issueStore, githubStore } = useStore();
+  const [labelDialog, setLabelDialog] = useState<boolean>(false);
+  const [issueNumber, setIssueNumber] = useState<number>();
+
+  const handleCreateLabel = (label: string) => {
+    issueStore.createLabel(
+      githubStore.accessToken ?? "",
+      label,
+      issueNumber ?? 0
+    );
+  };
+
+  const handleOpenDialog = (issueNum?: number) => {
+    setIssueNumber(issueNum);
+    setLabelDialog(true);
+  };
 
   return (
     <>
@@ -35,7 +52,11 @@ const GithubIssues = () => {
                 </styled.LabelContainer>
                 {/* state={issue.state} */}
                 <styled.Buttons>
-                  <styled.Button>Add Label</styled.Button>
+                  <styled.Button
+                    onClick={() => handleOpenDialog(issue.issue_number)}
+                  >
+                    Add Label
+                  </styled.Button>
                   <styled.Button>Add to System</styled.Button>
                 </styled.Buttons>
               </styled.IssueCard>
@@ -48,6 +69,12 @@ const GithubIssues = () => {
           </styled.NoIssues>
         )}
       </styled.HomeContainer>
+      {labelDialog && (
+        <CreateLabelDialog
+          onClose={() => setLabelDialog(false)}
+          onSubmit={(label) => handleCreateLabel(label)}
+        />
+      )}
     </>
   );
 };
