@@ -12,6 +12,12 @@ interface PropsInterface {
 const Navbar: FC<PropsInterface> = ({ onLogin }) => {
   const { githubStore } = useStore();
   const history = useHistory();
+
+  const handleUser = async () => {
+    await githubStore.getUser();
+    history.push(ROUTES.user);
+  };
+
   return (
     <styled.NavContainer>
       <styled.LeftContainer>
@@ -24,9 +30,7 @@ const Navbar: FC<PropsInterface> = ({ onLogin }) => {
 
         <GithubLogin />
       </styled.LeftContainer>
-      <styled.HomeButton onClick={githubStore.getUser}>
-        get user
-      </styled.HomeButton>
+      <styled.HomeButton onClick={handleUser}>get user</styled.HomeButton>
     </styled.NavContainer>
   );
 };

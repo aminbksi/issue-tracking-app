@@ -1,13 +1,19 @@
-import { RequestModel } from "core";
+import { RequestModel, User, UserModelInterface } from "core";
 import axios from "axios";
-import { types } from "mobx-state-tree";
+import { cast, types } from "mobx-state-tree";
 import { getAccessToken, refreshAxiosToken } from "api";
 
 const GithubStore = types
   .model("GithubStore", {
     request: types.optional(RequestModel, {}),
-    accessToken: "",
+    accessToken: types.maybe(types.string),
+    user: types.maybe(User),
   })
+  .actions((self) => ({
+    setUser(user: UserModelInterface) {
+      self.user = user;
+    },
+  }))
   .actions((self) => ({
     init() {
       self.accessToken = getAccessToken();
@@ -28,7 +34,12 @@ const GithubStore = types
       await axios
         .get("http://localhost:3001/api/user", requestHeaders)
         .then((response) => {
-          console.log(response);
+          self.setUser(
+            cast({
+              username: response.data.name,
+              issues: response.data.issues,
+            })
+          );
         });
     },
   }))
