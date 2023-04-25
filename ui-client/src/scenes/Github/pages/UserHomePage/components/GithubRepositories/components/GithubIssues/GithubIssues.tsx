@@ -2,12 +2,14 @@ import { observer } from "mobx-react-lite";
 import * as styled from "./GithubIssues.styled";
 import { useStore } from "shared";
 import { useState } from "react";
-import { CreateLabelDialog } from "ui-kit";
+import { CreateLabelDialog, DeleteLabelDialog } from "ui-kit";
 
 const GithubIssues = () => {
   const { issueStore, githubStore } = useStore();
   const [labelDialog, setLabelDialog] = useState<boolean>(false);
   const [issueNumber, setIssueNumber] = useState<number>();
+  const [deleteLabel, setDeleteLabel] = useState<boolean>(false);
+  const [labelName, setLabelName] = useState<string>("");
 
   const handleCreateLabel = (label: string) => {
     issueStore.createLabel(
@@ -20,6 +22,21 @@ const GithubIssues = () => {
   const handleOpenDialog = (issueNum?: number) => {
     setIssueNumber(issueNum);
     setLabelDialog(true);
+  };
+
+  const handleOpenDelete = (name: string, issueNum?: number) => {
+    setDeleteLabel(true);
+    setLabelName(name);
+    setIssueNumber(issueNum);
+  };
+
+  const handleDeleteLabel = () => {
+    setDeleteLabel(false);
+    issueStore.deleteLabel(
+      githubStore.accessToken ?? "",
+      labelName,
+      issueNumber ?? 0
+    );
   };
 
   return (
@@ -45,7 +62,13 @@ const GithubIssues = () => {
                 <styled.LabelContainer>
                   {issue.labels &&
                     issue.labels.map((label, index) => (
-                      <styled.Label color={label.color} key={index}>
+                      <styled.Label
+                        onClick={() =>
+                          handleOpenDelete(label.name, issue.issue_number)
+                        }
+                        color={label.color}
+                        key={index}
+                      >
                         {label.name}
                       </styled.Label>
                     ))}
@@ -69,6 +92,12 @@ const GithubIssues = () => {
           </styled.NoIssues>
         )}
       </styled.HomeContainer>
+      {deleteLabel && (
+        <DeleteLabelDialog
+          onClose={() => setDeleteLabel(false)}
+          onSubmit={handleDeleteLabel}
+        />
+      )}
       {labelDialog && (
         <CreateLabelDialog
           onClose={() => setLabelDialog(false)}

@@ -56,7 +56,6 @@ const IssueStore = types
       await axios
         .get("http://localhost:3001/api/repo/issues", requestHeaders)
         .then((response) => {
-          console.log(response.data);
           if (response.data.length > 0) {
             self.setIssues(response.data);
           }
@@ -80,6 +79,35 @@ const IssueStore = types
       axios
         .post(
           `http://localhost:3001/api/repo/issues/label`,
+          requestBody,
+          requestHeaders
+        )
+        .then(() => {
+          this.getRepositoryIssues(
+            self.owner ?? "",
+            self.repository ?? "",
+            accessToken
+          );
+        });
+    },
+    deleteLabel(accessToken: string, label: string, issue_number: number) {
+      const requestHeaders = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      };
+      const requestBody = {
+        label: label,
+        owner: self.owner,
+        repo: self.repository,
+        issue_number: issue_number,
+      };
+      axios
+        .post(
+          `http://localhost:3001/api/repo/issues/label/delete`,
           requestBody,
           requestHeaders
         )
