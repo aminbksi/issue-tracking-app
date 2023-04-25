@@ -119,5 +119,34 @@ const IssueStore = types
           );
         });
     },
+    createIssue(accessToken: string, title: string, body: string) {
+      const requestHeaders = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      };
+      const requestBody = {
+        body,
+        title,
+        owner: self.owner,
+        repo: self.repository,
+      };
+      axios
+        .post(
+          `http://localhost:3001/api/repo/issues/create`,
+          requestBody,
+          requestHeaders
+        )
+        .then(() => {
+          this.getRepositoryIssues(
+            self.owner ?? "",
+            self.repository ?? "",
+            accessToken
+          );
+        });
+    },
   }));
 export { IssueStore };

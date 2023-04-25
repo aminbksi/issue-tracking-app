@@ -73,4 +73,29 @@ module.exports = (app) => {
         res.send(response.data);
       });
   });
+
+  //
+  app.post("/api/repo/issues/create", async (req, res) => {
+    const { owner, repo, title, body } = req.body;
+    const requestHeaders = {
+      headers: {
+        Authorization: req.get("Authorization"),
+      },
+    };
+
+    const requestBody = {
+      title,
+      body,
+    };
+
+    await axios
+      .post(
+        `https://api.github.com/repos/${owner}/${repo}/issues`,
+        requestBody,
+        requestHeaders
+      )
+      .then(async (response) => {
+        res.send(response.data);
+      });
+  });
 };

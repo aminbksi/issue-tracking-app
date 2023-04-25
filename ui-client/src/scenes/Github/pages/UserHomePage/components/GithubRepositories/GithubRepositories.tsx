@@ -3,9 +3,13 @@ import * as styled from "./GithubRepositories.styled";
 import { useStore } from "shared";
 import { GithubIssues } from "./components";
 import { Repositories } from "./components/Repositories";
+import { useState } from "react";
+import { CreateIssueDialog } from "ui-kit";
 
 const GithubRepositories = () => {
   const { githubStore, issueStore } = useStore();
+  const [openCreateIssueDialog, setOpenCreateIssueDialog] =
+    useState<boolean>(false);
 
   const handleClickRepository = async (repository: string, owner: string) => {
     await issueStore.getRepositoryIssues(
@@ -14,6 +18,12 @@ const GithubRepositories = () => {
       githubStore.accessToken ?? ""
     );
     issueStore.selectRepository();
+  };
+
+  const handleCreateIssue = (title: string, description: string) => {
+    console.log(title, description);
+    setOpenCreateIssueDialog(false);
+    issueStore.createIssue(githubStore.accessToken ?? "", title, description);
   };
 
   return (
@@ -33,7 +43,9 @@ const GithubRepositories = () => {
               <styled.Button onClick={issueStore.unselectRepository}>
                 Go back
               </styled.Button>
-              <styled.Button>Create an Issue</styled.Button>
+              <styled.Button onClick={() => setOpenCreateIssueDialog(true)}>
+                Create an Issue
+              </styled.Button>
             </styled.Buttons>
           </styled.Tab>
         ) : (
@@ -49,6 +61,12 @@ const GithubRepositories = () => {
           <Repositories onClickRepository={handleClickRepository} />
         )}
       </styled.Container>
+      {openCreateIssueDialog && (
+        <CreateIssueDialog
+          onClose={() => setOpenCreateIssueDialog(false)}
+          onSubmit={handleCreateIssue}
+        />
+      )}
     </>
   );
 };
