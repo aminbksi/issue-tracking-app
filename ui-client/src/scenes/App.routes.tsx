@@ -12,6 +12,12 @@ const Home = lazy(() => import("./Home/Home"));
 const UserHomePage = lazy(
   () => import("./Github/pages/UserHomePage/UserHomePage")
 );
+const GithubIssues = lazy(
+  () =>
+    import(
+      "./Github/pages/UserHomePage/components/GithubRepositories/components/GithubIssues/GithubIssues"
+    )
+);
 
 export const PUBLIC_ROUTES: RouteConfigInterface[] = [
   {
@@ -23,5 +29,10 @@ export const PUBLIC_ROUTES: RouteConfigInterface[] = [
     path: ROUTES.user,
     exact: true,
     main: () => <UserHomePage />,
+  },
+  {
+    path: ROUTES.issues,
+    exact: true,
+    main: () => <GithubIssues />,
   },
 ];

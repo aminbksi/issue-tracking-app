@@ -4,7 +4,6 @@ export const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow-y: scroll;
   margin: 80px 0 54px;
   pointer-events: auto;
 `;

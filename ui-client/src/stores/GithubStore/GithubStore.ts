@@ -40,8 +40,6 @@ const GithubStore = types
               issues: response.data.issues,
             })
           );
-
-          console.log(self.user);
         });
     },
   }))

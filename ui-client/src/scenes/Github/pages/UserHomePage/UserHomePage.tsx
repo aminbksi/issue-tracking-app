@@ -2,11 +2,17 @@ import { observer } from "mobx-react-lite";
 import * as styled from "./UserHomePage.styled";
 import { useStore } from "shared";
 import { useState } from "react";
-import { LoadingPage } from "ui-kit";
+import { SystemIssues } from "./components/SystemIssues";
+import { GithubRepositories } from "./components/GithubRepositories";
 
 const UserHomePage = () => {
   const [actived, setActived] = useState<boolean>(true);
-  const { githubStore } = useStore();
+  const { userStore, githubStore } = useStore();
+
+  const handleGithubFetch = () => {
+    setActived(false);
+    userStore.getRepositories(githubStore.accessToken ?? "");
+  };
 
   return (
     <styled.HomeContainer>
@@ -14,11 +20,11 @@ const UserHomePage = () => {
         <styled.Tab active={actived} onClick={() => setActived(true)}>
           System
         </styled.Tab>
-        <styled.Tab active={!actived} onClick={() => setActived(false)}>
+        <styled.Tab active={!actived} onClick={handleGithubFetch}>
           Github
         </styled.Tab>
       </styled.TabContainer>
-      {!githubStore.user ? <LoadingPage /> : githubStore.user?.username}
+      {actived ? <SystemIssues /> : <GithubRepositories />}
     </styled.HomeContainer>
   );
 };
