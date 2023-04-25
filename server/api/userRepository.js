@@ -32,4 +32,70 @@ module.exports = (app) => {
         res.send(response.data);
       });
   });
+
+  app.post("/api/repo/issues/label", async (req, res) => {
+    const { owner, repo, label, issue_number } = req.body;
+    const requestHeaders = {
+      headers: {
+        Authorization: req.get("Authorization"),
+      },
+    };
+
+    const requestBody = {
+      labels: [label],
+    };
+
+    await axios
+      .post(
+        `https://api.github.com/repos/${owner}/${repo}/issues/${issue_number}/labels`,
+        requestBody,
+        requestHeaders
+      )
+      .then(async (response) => {
+        res.send(response.data);
+      });
+  });
+
+  app.post("/api/repo/issues/label/delete", async (req, res) => {
+    const { owner, repo, label, issue_number } = req.body;
+    const requestHeaders = {
+      headers: {
+        Authorization: req.get("Authorization"),
+      },
+    };
+
+    await axios
+      .delete(
+        `https://api.github.com/repos/${owner}/${repo}/issues/${issue_number}/labels/${label}`,
+        requestHeaders
+      )
+      .then(async (response) => {
+        res.send(response.data);
+      });
+  });
+
+  //
+  app.post("/api/repo/issues/create", async (req, res) => {
+    const { owner, repo, title, body } = req.body;
+    const requestHeaders = {
+      headers: {
+        Authorization: req.get("Authorization"),
+      },
+    };
+
+    const requestBody = {
+      title,
+      body,
+    };
+
+    await axios
+      .post(
+        `https://api.github.com/repos/${owner}/${repo}/issues`,
+        requestBody,
+        requestHeaders
+      )
+      .then(async (response) => {
+        res.send(response.data);
+      });
+  });
 };

@@ -58,6 +58,7 @@ export const Label = styled.span<{ color?: string }>`
   border-radius: 20px;
   font-size: 14px;
   color: #333;
+  cursor: pointer;
   margin-right: 10px;
   margin-bottom: 10px;
 `;
