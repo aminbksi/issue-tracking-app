@@ -1,4 +1,10 @@
-import { RequestModel, User, UserModelInterface } from "core";
+import {
+  Issue,
+  IssueModelInterface,
+  RequestModel,
+  User,
+  UserModelInterface,
+} from "core";
 import axios from "axios";
 import { cast, types } from "mobx-state-tree";
 import { getAccessToken, refreshAxiosToken } from "api";
@@ -8,10 +14,23 @@ const GithubStore = types
     request: types.optional(RequestModel, {}),
     accessToken: types.maybe(types.string),
     user: types.maybe(User),
+    issues: types.maybe(types.array(Issue)),
   })
   .actions((self) => ({
     setUser(user: UserModelInterface) {
       self.user = user;
+    },
+    setIssues(issues: Array<IssueModelInterface>) {
+      self.issues = cast(
+        issues.map((issue) => ({
+          title: issue.title,
+          description: issue.description,
+          labels: issue.labels,
+          state: issue.state,
+          issue_number: Number(issue.issue_number),
+          issueId: issue.issueId,
+        }))
+      );
     },
   }))
   .actions((self) => ({
@@ -34,10 +53,10 @@ const GithubStore = types
       await axios
         .get("http://localhost:3001/api/user", requestHeaders)
         .then((response) => {
+          self.setIssues(response.data.issues);
           self.setUser(
             cast({
               username: response.data.name,
-              issues: response.data.issues,
             })
           );
         });

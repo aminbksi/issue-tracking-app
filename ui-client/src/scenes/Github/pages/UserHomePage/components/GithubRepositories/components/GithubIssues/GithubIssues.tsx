@@ -2,7 +2,12 @@ import { observer } from "mobx-react-lite";
 import * as styled from "./GithubIssues.styled";
 import { useStore } from "shared";
 import { useState } from "react";
-import { CreateLabelDialog, DeleteLabelDialog } from "ui-kit";
+import {
+  AddIssueToSystemDialog,
+  CreateLabelDialog,
+  DeleteLabelDialog,
+} from "ui-kit";
+import { IssueModelInterface } from "core";
 
 const GithubIssues = () => {
   const { issueStore, githubStore } = useStore();
@@ -10,6 +15,8 @@ const GithubIssues = () => {
   const [issueNumber, setIssueNumber] = useState<number>();
   const [deleteLabel, setDeleteLabel] = useState<boolean>(false);
   const [labelName, setLabelName] = useState<string>("");
+  const [addIssueToSystem, setAddIssueToSystem] = useState<boolean>(false);
+  const [selectedIssue, setSelectedIssue] = useState<IssueModelInterface>();
 
   const handleCreateLabel = (label: string) => {
     issueStore.createLabel(
@@ -39,15 +46,20 @@ const GithubIssues = () => {
     );
   };
 
+  const handleOpenAddToSystemDialog = (issue: IssueModelInterface) => {
+    setAddIssueToSystem(true);
+    setSelectedIssue(issue);
+  };
+
+  const handleAddIssueToSystem = () => {
+    if (!selectedIssue) return;
+    // TODO: already exists in system notification
+    issueStore.addIssueToSystem(selectedIssue, githubStore.accessToken ?? "");
+  };
+
   return (
     <>
       <styled.HomeContainer>
-        {/* {issueStore.issues &&
-          issueStore.issues.length > 0 &&
-          issueStore.issues.map((issue) => {
-            return <div>{issue.title}</div>;
-          })} */}
-
         {issueStore.issues && issueStore.issues.length > 0 ? (
           issueStore.issues.map((issue, index) => (
             <styled.IssueContainer key={index}>
@@ -73,14 +85,17 @@ const GithubIssues = () => {
                       </styled.Label>
                     ))}
                 </styled.LabelContainer>
-                {/* state={issue.state} */}
                 <styled.Buttons>
                   <styled.Button
                     onClick={() => handleOpenDialog(issue.issue_number)}
                   >
                     Add Label
                   </styled.Button>
-                  <styled.Button>Add to System</styled.Button>
+                  <styled.Button
+                    onClick={() => handleOpenAddToSystemDialog(issue)}
+                  >
+                    Add to System
+                  </styled.Button>
                 </styled.Buttons>
               </styled.IssueCard>
             </styled.IssueContainer>
@@ -102,6 +117,12 @@ const GithubIssues = () => {
         <CreateLabelDialog
           onClose={() => setLabelDialog(false)}
           onSubmit={(label) => handleCreateLabel(label)}
+        />
+      )}
+      {addIssueToSystem && (
+        <AddIssueToSystemDialog
+          onClose={() => setAddIssueToSystem(false)}
+          onSubmit={handleAddIssueToSystem}
         />
       )}
     </>

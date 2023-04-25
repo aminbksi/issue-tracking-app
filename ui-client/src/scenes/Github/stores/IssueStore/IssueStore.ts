@@ -29,6 +29,7 @@ const IssueStore = types
           labels: issue.labels,
           state: issue.state,
           issue_number: issue.number,
+          issueId: String(issue.id),
         }))
       );
     },
@@ -146,6 +147,31 @@ const IssueStore = types
             self.repository ?? "",
             accessToken
           );
+        });
+    },
+    addIssueToSystem(issue: IssueModelInterface, accessToken: string) {
+      const requestHeaders = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      };
+      const requestBody = {
+        issue,
+        owner: self.owner,
+        repo: self.repository,
+      };
+      axios
+        .post(
+          `http://localhost:3001/api/user/issues`,
+          requestBody,
+          requestHeaders
+        )
+        .then((response) => {
+          // TODO: Fetch system issues?
+          console.log(response);
         });
     },
   }));
