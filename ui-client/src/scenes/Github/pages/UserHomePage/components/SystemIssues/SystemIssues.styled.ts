@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+export const Container = styled.div`
+  overflow-y: scroll;
+  padding: 20px;
+`;
+
 export const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -108,4 +113,21 @@ export const NoIssues = styled.div`
   text-align: center;
   color: gray;
   font-style: italic;
+`;
+
+export const TopButton = styled.button`
+  padding: 8px 8px;
+  font-size: 13px;
+  line-height: 1;
+  background: transparent;
+  border: 1px solid white;
+
+  color: white;
+  cursor: pointer;
+  border-radius: 8px;
+  margin: 0 10px;
+
+  :hover {
+    background: #035199;
+  }
 `;

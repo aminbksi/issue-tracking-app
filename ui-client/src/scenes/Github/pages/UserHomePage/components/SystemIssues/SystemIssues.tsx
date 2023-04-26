@@ -2,28 +2,66 @@ import { observer } from "mobx-react-lite";
 import * as styled from "./SystemIssues.styled";
 import { useStore } from "shared";
 import { IssueModelInterface } from "core";
+import { useEffect, useState } from "react";
+import { CreateIssueDialog, CreateLabelDialog } from "ui-kit";
 
 const SystemIssues = () => {
-  const { githubStore } = useStore();
+  const { githubStore, systemStore } = useStore();
+
+  const [openCreateIssueDialog, setOpenCreateIssueDialog] =
+    useState<boolean>(false);
+  const [labelDialog, setLabelDialog] = useState<boolean>(false);
+  const [issueSystemId, setIssueSystemId] = useState<string>();
+
+  useEffect(() => {
+    if (!githubStore.user) {
+      githubStore.getUser();
+    }
+
+    systemStore.fetchSystemIssues();
+  }, [githubStore, systemStore]);
 
   // TODO: Implement editing system issues
-  //   Create Issue
-  //  Add Label
   //  Delete Label
   // Update github
-  // Fetch System issues after adding issue to system
 
   const handleOpenAddToSystemDialog = (issue: IssueModelInterface) => {};
 
-  const handleOpenDialog = (issueNum?: number) => {};
+  const handleOpenDialog = (id?: string) => {
+    setIssueSystemId(id);
+    setLabelDialog(true);
+  };
 
   const handleOpenDelete = (name: string, issueNum?: number) => {};
 
+  const handleCreateIssue = async (title: string, description: string) => {
+    setOpenCreateIssueDialog(false);
+    await systemStore.createIssue(
+      title,
+      description,
+      githubStore.user?.username ?? ""
+    );
+  };
+
+  const handleCreateLabel = (label: string, color: string) => {
+    systemStore.addLabel(label, color, issueSystemId ?? "");
+  };
+
   return (
     <>
+      <div>
+        <styled.Tab>
+          All the issues in the system
+          <styled.Buttons>
+            <styled.TopButton onClick={() => setOpenCreateIssueDialog(true)}>
+              Create an Issue
+            </styled.TopButton>
+          </styled.Buttons>
+        </styled.Tab>
+      </div>
       <styled.HomeContainer>
-        {githubStore.issues && githubStore.issues?.length > 0 ? (
-          githubStore.issues.map((issue, index) => (
+        {systemStore.issues && systemStore.issues?.length > 0 ? (
+          systemStore.issues.map((issue, index) => (
             <styled.IssueContainer key={index}>
               <styled.IssueCard>
                 <styled.TopCard>
@@ -49,7 +87,7 @@ const SystemIssues = () => {
                 </styled.LabelContainer>
                 <styled.Buttons>
                   <styled.Button
-                    onClick={() => handleOpenDialog(issue.issue_number)}
+                    onClick={() => handleOpenDialog(issue.issueSystemId)}
                   >
                     Add Label
                   </styled.Button>
@@ -75,18 +113,26 @@ const SystemIssues = () => {
           onSubmit={handleDeleteLabel}
         />
       )}
-      {labelDialog && (
-        <CreateLabelDialog
-          onClose={() => setLabelDialog(false)}
-          onSubmit={(label) => handleCreateLabel(label)}
-        />
-      )}
+      
       {addIssueToSystem && (
         <AddIssueToSystemDialog
           onClose={() => setAddIssueToSystem(false)}
           onSubmit={handleAddIssueToSystem}
         />
       )} */}
+      {labelDialog && (
+        <CreateLabelDialog
+          onClose={() => setLabelDialog(false)}
+          onSubmit={(label, color) => handleCreateLabel(label, color ?? "")}
+          isColor
+        />
+      )}
+      {openCreateIssueDialog && (
+        <CreateIssueDialog
+          onClose={() => setOpenCreateIssueDialog(false)}
+          onSubmit={handleCreateIssue}
+        />
+      )}
     </>
   );
 };

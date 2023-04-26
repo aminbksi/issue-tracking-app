@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 const issueSchema = new mongoose.Schema({
   issueId: {
     type: String,
-    required: true,
+  },
+  issueSystemId: {
+    type: String,
   },
   title: {
     type: String,
@@ -14,6 +16,7 @@ const issueSchema = new mongoose.Schema({
   },
   state: {
     type: String,
+    default: "open",
   },
   issue_number: {
     type: String,
@@ -27,7 +30,6 @@ const issueSchema = new mongoose.Schema({
   project: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Project",
-    required: true,
   },
 });
 

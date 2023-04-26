@@ -4,19 +4,29 @@ import { observer } from "mobx-react-lite";
 
 interface PropsInterface {
   onClose: () => void;
-  onSubmit: (labelName: string) => void;
+  onSubmit: (labelName: string, color?: string) => void;
+  isColor?: boolean;
 }
 
-const CreateLabelDialog: FC<PropsInterface> = ({ onClose, onSubmit }) => {
+const CreateLabelDialog: FC<PropsInterface> = ({
+  onClose,
+  onSubmit,
+  isColor,
+}) => {
   const [labelName, setLabelName] = useState("");
+  const [colorHex, setColorHex] = useState("");
 
   const handleSubmit = () => {
-    onSubmit(labelName);
+    onSubmit(labelName, colorHex);
     onClose();
   };
 
-  const handleInputChange = (event: any) => {
+  const handleLabelInputChange = (event: any) => {
     setLabelName(event.target.value);
+  };
+
+  const handleColorInputChange = (event: any) => {
+    setColorHex(event.target.value);
   };
 
   return (
@@ -31,8 +41,16 @@ const CreateLabelDialog: FC<PropsInterface> = ({ onClose, onSubmit }) => {
           type="text"
           placeholder="Label Name"
           value={labelName}
-          onChange={handleInputChange}
+          onChange={handleLabelInputChange}
         />
+        {isColor && (
+          <styled.Input
+            type="text"
+            placeholder="Color Hex"
+            value={colorHex}
+            onChange={handleColorInputChange}
+          />
+        )}
         <styled.Button onClick={handleSubmit}>Add</styled.Button>
       </styled.DialogContent>
     </styled.DialogOverlay>

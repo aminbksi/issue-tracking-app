@@ -8,6 +8,7 @@ const Issue = types.model("Issue", {
   state: types.maybe(types.string),
   issue_number: types.maybe(types.number),
   issueId: types.maybe(types.string),
+  issueSystemId: types.maybe(types.string),
 });
 
 export interface IssueModelInterface extends Instance<typeof Issue> {}
