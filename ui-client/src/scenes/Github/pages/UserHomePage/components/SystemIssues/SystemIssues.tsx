@@ -3,7 +3,11 @@ import * as styled from "./SystemIssues.styled";
 import { useStore } from "shared";
 import { IssueModelInterface } from "core";
 import { useEffect, useState } from "react";
-import { CreateIssueDialog, CreateLabelDialog } from "ui-kit";
+import {
+  CreateIssueDialog,
+  CreateLabelDialog,
+  DeleteLabelDialog,
+} from "ui-kit";
 
 const SystemIssues = () => {
   const { githubStore, systemStore } = useStore();
@@ -12,6 +16,8 @@ const SystemIssues = () => {
     useState<boolean>(false);
   const [labelDialog, setLabelDialog] = useState<boolean>(false);
   const [issueSystemId, setIssueSystemId] = useState<string>();
+  const [deleteLabel, setDeleteLabel] = useState<boolean>(false);
+  const [labelName, setLabelName] = useState<string>("");
 
   useEffect(() => {
     if (!githubStore.user) {
@@ -32,7 +38,11 @@ const SystemIssues = () => {
     setLabelDialog(true);
   };
 
-  const handleOpenDelete = (name: string, issueNum?: number) => {};
+  const handleOpenDelete = (name: string, issueNumId?: string) => {
+    setDeleteLabel(true);
+    setLabelName(name);
+    setIssueSystemId(issueNumId);
+  };
 
   const handleCreateIssue = async (title: string, description: string) => {
     setOpenCreateIssueDialog(false);
@@ -45,6 +55,12 @@ const SystemIssues = () => {
 
   const handleCreateLabel = (label: string, color: string) => {
     systemStore.addLabel(label, color, issueSystemId ?? "");
+    setIssueSystemId("");
+  };
+
+  const handleDeleteLabel = () => {
+    setDeleteLabel(false);
+    systemStore.deleteLabel(labelName, issueSystemId ?? "");
   };
 
   return (
@@ -76,7 +92,7 @@ const SystemIssues = () => {
                     issue.labels.map((label, index) => (
                       <styled.Label
                         onClick={() =>
-                          handleOpenDelete(label.name, issue.issue_number)
+                          handleOpenDelete(label.name, issue.issueSystemId)
                         }
                         color={label.color}
                         key={index}
@@ -107,12 +123,7 @@ const SystemIssues = () => {
           </styled.NoIssues>
         )}
       </styled.HomeContainer>
-      {/* {deleteLabel && (
-        <DeleteLabelDialog
-          onClose={() => setDeleteLabel(false)}
-          onSubmit={handleDeleteLabel}
-        />
-      )}
+      {/* 
       
       {addIssueToSystem && (
         <AddIssueToSystemDialog
@@ -120,6 +131,12 @@ const SystemIssues = () => {
           onSubmit={handleAddIssueToSystem}
         />
       )} */}
+      {deleteLabel && (
+        <DeleteLabelDialog
+          onClose={() => setDeleteLabel(false)}
+          onSubmit={handleDeleteLabel}
+        />
+      )}
       {labelDialog && (
         <CreateLabelDialog
           onClose={() => setLabelDialog(false)}

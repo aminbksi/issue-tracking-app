@@ -59,6 +59,20 @@ const SystemStore = types
           self.fetchSystemIssues();
         });
     },
+    deleteLabel(label: string, issueSystemId: string) {
+      const requestBody = {
+        label,
+        issueSystemId,
+      };
+      axios
+        .post(
+          `http://localhost:3001/api/issues/label/delete/system`,
+          requestBody
+        )
+        .then(() => {
+          self.fetchSystemIssues();
+        });
+    },
   }));
 
 export { SystemStore };

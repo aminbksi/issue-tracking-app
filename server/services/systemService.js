@@ -29,4 +29,19 @@ const createLabel = async (issueSystemId, label) => {
   await issue.save();
   return issue;
 };
-module.exports = { createIssueInSystem, fetchAllIssues, createLabel };
+
+const deleteLabel = async (issueSystemId, label) => {
+  const issue = await Issue.findOne({ issueSystemId });
+  issue.labels.splice(
+    issue.labels.findIndex((item) => item.name === label),
+    1
+  );
+  await issue.save();
+  return issue;
+};
+module.exports = {
+  createIssueInSystem,
+  fetchAllIssues,
+  createLabel,
+  deleteLabel,
+};
