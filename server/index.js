@@ -7,6 +7,7 @@ require("./models/User");
 require("./models/Project");
 require("./models/Issue");
 require("./services/userService");
+require("./services/systemService");
 
 mongoose.connect(keys.mongoURI);
 
@@ -17,5 +18,6 @@ app.use(bodyParser.json());
 
 require("./api/githubRepository")(app);
 require("./api/userRepository")(app);
+require("./api/systemRepository")(app);
 
 app.listen(3001, () => console.log("API listening on 3001"));

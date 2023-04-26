@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { issueSchema } = require("./Issue");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -6,12 +7,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  issues: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Issue",
-    },
-  ],
+  issues: [issueSchema],
 });
 
 const User = mongoose.model("User", userSchema);

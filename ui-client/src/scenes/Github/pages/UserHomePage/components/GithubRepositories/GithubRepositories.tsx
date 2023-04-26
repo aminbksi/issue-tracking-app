@@ -21,7 +21,6 @@ const GithubRepositories = () => {
   };
 
   const handleCreateIssue = (title: string, description: string) => {
-    console.log(title, description);
     setOpenCreateIssueDialog(false);
     issueStore.createIssue(githubStore.accessToken ?? "", title, description);
   };

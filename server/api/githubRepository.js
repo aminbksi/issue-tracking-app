@@ -49,4 +49,10 @@ module.exports = (app) => {
         res.send(user);
       });
   });
+
+  app.post("/api/user/issues", async (req, res) => {
+    const { issue, owner, repo } = req.body;
+    const issueCreated = await userService.createIssue(owner, repo, issue);
+    res.send(issueCreated);
+  });
 };

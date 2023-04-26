@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
 const issueSchema = new mongoose.Schema({
+  issueId: {
+    type: String,
+  },
+  issueSystemId: {
+    type: String,
+  },
   title: {
     type: String,
     required: true,
@@ -8,20 +14,25 @@ const issueSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  comments: [
+  state: {
+    type: String,
+    default: "open",
+  },
+  issue_number: {
+    type: String,
+  },
+  labels: [
     {
-      text: String,
-      author: String,
+      name: String,
+      color: String,
     },
   ],
-  labels: [String],
   project: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Project",
-    required: true,
   },
 });
 
 const Issue = mongoose.model("Issue", issueSchema);
 
-module.exports = Issue;
+module.exports = { issueSchema: issueSchema, Issue: Issue };
