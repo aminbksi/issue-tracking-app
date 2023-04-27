@@ -9,6 +9,7 @@ import {
   DeleteLabelDialog,
   UpdateIssueOnGithubDialog,
 } from "ui-kit";
+import Loading from "ui-kit/templates/LoadingPage/LoadingPage";
 
 const SystemIssues = () => {
   const { githubStore, systemStore, issueStore } = useStore();
@@ -88,6 +89,10 @@ const SystemIssues = () => {
     setRepositoryName("");
     setUpdateIssueOnGithub(false);
   };
+
+  if (!githubStore.accessToken) {
+    return <Loading />;
+  }
 
   return (
     <>
