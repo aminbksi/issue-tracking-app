@@ -7,10 +7,11 @@ import {
   CreateIssueDialog,
   CreateLabelDialog,
   DeleteLabelDialog,
+  UpdateIssueOnGithubDialog,
 } from "ui-kit";
 
 const SystemIssues = () => {
-  const { githubStore, systemStore } = useStore();
+  const { githubStore, systemStore, issueStore } = useStore();
 
   const [openCreateIssueDialog, setOpenCreateIssueDialog] =
     useState<boolean>(false);
@@ -18,6 +19,10 @@ const SystemIssues = () => {
   const [issueSystemId, setIssueSystemId] = useState<string>();
   const [deleteLabel, setDeleteLabel] = useState<boolean>(false);
   const [labelName, setLabelName] = useState<string>("");
+  const [updateIssueOnGithub, setUpdateIssueOnGithub] =
+    useState<boolean>(false);
+  const [repositoryName, setRepositoryName] = useState<string>("");
+  const [selectedIssue, setSelectedIssue] = useState<IssueModelInterface>();
 
   useEffect(() => {
     if (!githubStore.user) {
@@ -27,11 +32,11 @@ const SystemIssues = () => {
     systemStore.fetchSystemIssues();
   }, [githubStore, systemStore]);
 
-  // TODO: Implement editing system issues
-  //  Delete Label
-  // Update github
-
-  const handleOpenAddToSystemDialog = (issue: IssueModelInterface) => {};
+  const handleUpdateOnGithub = (issue: IssueModelInterface) => {
+    setRepositoryName(issue.repository ?? "");
+    setSelectedIssue(issue);
+    setUpdateIssueOnGithub(true);
+  };
 
   const handleOpenDialog = (id?: string) => {
     setIssueSystemId(id);
@@ -61,6 +66,27 @@ const SystemIssues = () => {
   const handleDeleteLabel = () => {
     setDeleteLabel(false);
     systemStore.deleteLabel(labelName, issueSystemId ?? "");
+  };
+
+  const handleUpdateIssueOnGithub = (repo?: string) => {
+    if (!selectedIssue) return;
+    if (!repo) {
+      issueStore.updateIssueOnGithub(
+        githubStore.accessToken ?? "",
+        selectedIssue,
+        repositoryName,
+        githubStore.user?.username ?? ""
+      );
+    } else {
+      issueStore.createIssueFromSystem(
+        githubStore.accessToken ?? "",
+        selectedIssue,
+        repo,
+        githubStore.user?.username ?? ""
+      );
+    }
+    setRepositoryName("");
+    setUpdateIssueOnGithub(false);
   };
 
   return (
@@ -107,9 +133,7 @@ const SystemIssues = () => {
                   >
                     Add Label
                   </styled.Button>
-                  <styled.Button
-                    onClick={() => handleOpenAddToSystemDialog(issue)}
-                  >
+                  <styled.Button onClick={() => handleUpdateOnGithub(issue)}>
                     Update on Github
                   </styled.Button>
                 </styled.Buttons>
@@ -123,14 +147,14 @@ const SystemIssues = () => {
           </styled.NoIssues>
         )}
       </styled.HomeContainer>
-      {/* 
-      
-      {addIssueToSystem && (
-        <AddIssueToSystemDialog
-          onClose={() => setAddIssueToSystem(false)}
-          onSubmit={handleAddIssueToSystem}
+
+      {updateIssueOnGithub && (
+        <UpdateIssueOnGithubDialog
+          onClose={() => setUpdateIssueOnGithub(false)}
+          onSubmit={handleUpdateIssueOnGithub}
+          isUpdate={!repositoryName}
         />
-      )} */}
+      )}
       {deleteLabel && (
         <DeleteLabelDialog
           onClose={() => setDeleteLabel(false)}

@@ -30,6 +30,7 @@ const IssueStore = types
           state: issue.state,
           issue_number: issue.number,
           issueId: String(issue.id),
+          repository: issue.repository,
         }))
       );
     },
@@ -57,6 +58,7 @@ const IssueStore = types
       await axios
         .get("http://localhost:3001/api/repo/issues", requestHeaders)
         .then((response) => {
+          console.log(response.data);
           if (response.data.length > 0) {
             self.setIssues(response.data);
           }
@@ -149,6 +151,72 @@ const IssueStore = types
           );
         });
     },
+    updateIssueOnGithub(
+      accessToken: string,
+      issue: IssueModelInterface,
+      repo: string,
+      user: string
+    ) {
+      const requestHeaders = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      };
+      const requestBody = {
+        issue,
+        owner: user,
+        repo,
+      };
+      axios
+        .post(
+          `http://localhost:3001/api/repo/issues/update`,
+          requestBody,
+          requestHeaders
+        )
+        .then(() => {
+          this.getRepositoryIssues(
+            self.owner ?? "",
+            self.repository ?? "",
+            accessToken
+          );
+        });
+    },
+    createIssueFromSystem(
+      accessToken: string,
+      issue: IssueModelInterface,
+      repo: string,
+      user: string
+    ) {
+      const requestHeaders = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      };
+      const requestBody = {
+        issue,
+        owner: user,
+        repo,
+      };
+      axios
+        .post(
+          `http://localhost:3001/api/repo/issues/create/github`,
+          requestBody,
+          requestHeaders
+        )
+        .then(() => {
+          this.getRepositoryIssues(
+            self.owner ?? "",
+            self.repository ?? "",
+            accessToken
+          );
+        });
+    },
     addIssueToSystem(issue: IssueModelInterface, accessToken: string) {
       const requestHeaders = {
         headers: {
@@ -163,16 +231,11 @@ const IssueStore = types
         owner: self.owner,
         repo: self.repository,
       };
-      axios
-        .post(
-          `http://localhost:3001/api/user/issues`,
-          requestBody,
-          requestHeaders
-        )
-        .then((response) => {
-          // TODO: Fetch system issues?
-          console.log(response);
-        });
+      axios.post(
+        `http://localhost:3001/api/user/issues`,
+        requestBody,
+        requestHeaders
+      );
     },
   }));
 export { IssueStore };

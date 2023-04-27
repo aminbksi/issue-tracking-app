@@ -98,4 +98,55 @@ module.exports = (app) => {
         res.send(response.data);
       });
   });
+
+  app.post("/api/repo/issues/create/github", async (req, res) => {
+    const { owner, repo, issue } = req.body;
+    const requestHeaders = {
+      headers: {
+        Authorization: req.get("Authorization"),
+      },
+    };
+
+    const requestBody = {
+      title: issue.title,
+      body: issue.description,
+      labels: issue.labels,
+    };
+
+    await axios
+      .post(
+        `https://api.github.com/repos/${owner}/${repo}/issues`,
+        requestBody,
+        requestHeaders
+      )
+      .then(async (response) => {
+        res.send(response.data);
+      });
+  });
+
+  app.post("/api/repo/issues/update", async (req, res) => {
+    const { owner, repo, issue } = req.body;
+    const { title, description, labels, issue_number } = issue;
+    const requestHeaders = {
+      headers: {
+        Authorization: req.get("Authorization"),
+      },
+    };
+
+    const requestBody = {
+      title,
+      body: description,
+      labels,
+    };
+
+    await axios
+      .patch(
+        `https://api.github.com/repos/${owner}/${repo}/issues/${issue_number}`,
+        requestBody,
+        requestHeaders
+      )
+      .then(async (response) => {
+        res.send(response.data);
+      });
+  });
 };

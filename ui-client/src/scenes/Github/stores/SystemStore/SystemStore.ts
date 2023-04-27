@@ -18,6 +18,7 @@ const SystemStore = types
           issue_number: Number(issue.issue_number),
           issueId: issue.issueId,
           issueSystemId: issue.issueSystemId,
+          repository: issue.repository,
         }))
       );
     },
