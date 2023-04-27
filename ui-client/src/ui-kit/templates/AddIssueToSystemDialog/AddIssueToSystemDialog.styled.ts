@@ -29,6 +29,7 @@ export const Input = styled.input`
   font-size: 16px;
   border: none;
   border-bottom: 2px solid #ccc;
+  background-color: transparent;
 
   &:focus {
     outline: none;
@@ -38,7 +39,7 @@ export const Input = styled.input`
 
 export const YesButton = styled.button`
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #31473a;
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -47,7 +48,7 @@ export const YesButton = styled.button`
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    background-color: #0069d9;
+    background-color: #7c8363;
   }
 `;
 
