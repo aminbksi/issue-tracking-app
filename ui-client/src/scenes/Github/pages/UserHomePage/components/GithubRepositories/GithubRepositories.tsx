@@ -40,7 +40,7 @@ const GithubRepositories = () => {
 
             <styled.Buttons>
               <styled.Button onClick={issueStore.unselectRepository}>
-                Go back
+                Go back to Repositories
               </styled.Button>
               <styled.Button onClick={() => setOpenCreateIssueDialog(true)}>
                 Create an Issue

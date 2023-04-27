@@ -14,7 +14,7 @@ export const DialogOverlay = styled.div`
 `;
 
 export const DialogContent = styled.div`
-  background-color: #fff;
+  background-color: #edf4f2;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -29,6 +29,7 @@ export const Input = styled.input`
   font-size: 16px;
   border: none;
   border-bottom: 2px solid #ccc;
+  background-color: transparent;
 
   &:focus {
     outline: none;
@@ -41,6 +42,7 @@ export const TextArea = styled.textarea`
   margin-bottom: 20px;
   font-size: 16px;
   border: 2px solid #ccc;
+  background-color: transparent;
 
   &:focus {
     outline: none;
@@ -50,7 +52,7 @@ export const TextArea = styled.textarea`
 
 export const Button = styled.button`
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #7c8363;
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -59,7 +61,7 @@ export const Button = styled.button`
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    background-color: #0069d9;
+    background-color: #31473a;
   }
 `;
 
@@ -71,7 +73,7 @@ export const CloseButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    color: #007bff;
+    color: #31473a;
   }
 `;
 

@@ -9,6 +9,7 @@ import {
   DeleteLabelDialog,
   UpdateIssueOnGithubDialog,
 } from "ui-kit";
+import Loading from "ui-kit/templates/LoadingPage/LoadingPage";
 
 const SystemIssues = () => {
   const { githubStore, systemStore, issueStore } = useStore();
@@ -89,11 +90,15 @@ const SystemIssues = () => {
     setUpdateIssueOnGithub(false);
   };
 
+  if (!githubStore.accessToken) {
+    return <Loading />;
+  }
+
   return (
     <>
       <div>
         <styled.Tab>
-          All the issues in the system
+          <div>All the issues in the system</div>
           <styled.Buttons>
             <styled.TopButton onClick={() => setOpenCreateIssueDialog(true)}>
               Create an Issue
@@ -164,7 +169,9 @@ const SystemIssues = () => {
       {labelDialog && (
         <CreateLabelDialog
           onClose={() => setLabelDialog(false)}
-          onSubmit={(label, color) => handleCreateLabel(label, color ?? "")}
+          onSubmit={(label, color) =>
+            handleCreateLabel(label, color ? color : "ededed")
+          }
           isColor
         />
       )}

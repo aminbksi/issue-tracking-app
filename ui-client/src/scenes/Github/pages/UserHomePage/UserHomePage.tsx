@@ -17,9 +17,9 @@ const UserHomePage = () => {
   return (
     <styled.HomeContainer>
       <styled.TabContainer>
-        <styled.Tab active={actived} onClick={() => setActived(true)}>
+        <styled.LeftTab active={actived} onClick={() => setActived(true)}>
           System
-        </styled.Tab>
+        </styled.LeftTab>
         <styled.Tab active={!actived} onClick={handleGithubFetch}>
           Github
         </styled.Tab>

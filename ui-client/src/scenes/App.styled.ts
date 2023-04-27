@@ -11,7 +11,7 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0 0 70px 0;
     display: flex;
     height: 100vh;
-    background-color: #cee1f0;
+    background-color: #EDF4F2;
     z-index: 30;
   }
   
