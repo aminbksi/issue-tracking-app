@@ -23,9 +23,10 @@ const GithubLogin: FC<PropsInterface> = (props) => {
     githubStore.logout();
   };
 
-  const handleSucess = async (data: any) => {
-    await githubStore.getAccessToken(data.code);
-    history.push(ROUTES.user);
+  const handleSucess = (data: any) => {
+    githubStore.getAccessToken(data.code).then(() => {
+      history.push(ROUTES.user);
+    });
   };
 
   const handleLogin = () => {
