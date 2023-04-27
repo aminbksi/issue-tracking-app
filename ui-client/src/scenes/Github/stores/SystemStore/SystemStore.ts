@@ -18,6 +18,7 @@ const SystemStore = types
           issue_number: Number(issue.issue_number),
           issueId: issue.issueId,
           issueSystemId: issue.issueSystemId,
+          repository: issue.repository,
         }))
       );
     },
@@ -55,6 +56,20 @@ const SystemStore = types
       };
       axios
         .post(`http://localhost:3001/api/repo/issues/system/label`, requestBody)
+        .then(() => {
+          self.fetchSystemIssues();
+        });
+    },
+    deleteLabel(label: string, issueSystemId: string) {
+      const requestBody = {
+        label,
+        issueSystemId,
+      };
+      axios
+        .post(
+          `http://localhost:3001/api/issues/label/delete/system`,
+          requestBody
+        )
         .then(() => {
           self.fetchSystemIssues();
         });

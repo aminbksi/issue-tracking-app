@@ -9,7 +9,6 @@ const getUser = async (username) => {
   console.log(username);
   const user = await User.findOne({ name: username });
 
-  //   If the user doesn't exist, create a new user document
   if (!user) {
     const newUser = new User({
       name: username,
@@ -24,6 +23,7 @@ const getUser = async (username) => {
 };
 
 const createIssue = async (username, repo, issue) => {
+  const issueSystemId = Math.floor(Math.random() * 90000) + 10000;
   const { issueId } = issue;
 
   const issueFound = await Issue.findOne({ issueId });
@@ -47,7 +47,9 @@ const createIssue = async (username, repo, issue) => {
     labels: issue.labels,
     state: issue.state,
     issue_number: issue.issue_number,
+    repository: repo,
     project: project._id,
+    issueSystemId: issueSystemId,
   });
   await newIssue.save();
   const user = await User.findOne({ name: username });

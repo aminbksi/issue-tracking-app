@@ -3,15 +3,26 @@ import * as styled from "./SystemIssues.styled";
 import { useStore } from "shared";
 import { IssueModelInterface } from "core";
 import { useEffect, useState } from "react";
-import { CreateIssueDialog, CreateLabelDialog } from "ui-kit";
+import {
+  CreateIssueDialog,
+  CreateLabelDialog,
+  DeleteLabelDialog,
+  UpdateIssueOnGithubDialog,
+} from "ui-kit";
 
 const SystemIssues = () => {
-  const { githubStore, systemStore } = useStore();
+  const { githubStore, systemStore, issueStore } = useStore();
 
   const [openCreateIssueDialog, setOpenCreateIssueDialog] =
     useState<boolean>(false);
   const [labelDialog, setLabelDialog] = useState<boolean>(false);
   const [issueSystemId, setIssueSystemId] = useState<string>();
+  const [deleteLabel, setDeleteLabel] = useState<boolean>(false);
+  const [labelName, setLabelName] = useState<string>("");
+  const [updateIssueOnGithub, setUpdateIssueOnGithub] =
+    useState<boolean>(false);
+  const [repositoryName, setRepositoryName] = useState<string>("");
+  const [selectedIssue, setSelectedIssue] = useState<IssueModelInterface>();
 
   useEffect(() => {
     if (!githubStore.user) {
@@ -21,18 +32,22 @@ const SystemIssues = () => {
     systemStore.fetchSystemIssues();
   }, [githubStore, systemStore]);
 
-  // TODO: Implement editing system issues
-  //  Delete Label
-  // Update github
-
-  const handleOpenAddToSystemDialog = (issue: IssueModelInterface) => {};
+  const handleUpdateOnGithub = (issue: IssueModelInterface) => {
+    setRepositoryName(issue.repository ?? "");
+    setSelectedIssue(issue);
+    setUpdateIssueOnGithub(true);
+  };
 
   const handleOpenDialog = (id?: string) => {
     setIssueSystemId(id);
     setLabelDialog(true);
   };
 
-  const handleOpenDelete = (name: string, issueNum?: number) => {};
+  const handleOpenDelete = (name: string, issueNumId?: string) => {
+    setDeleteLabel(true);
+    setLabelName(name);
+    setIssueSystemId(issueNumId);
+  };
 
   const handleCreateIssue = async (title: string, description: string) => {
     setOpenCreateIssueDialog(false);
@@ -45,6 +60,33 @@ const SystemIssues = () => {
 
   const handleCreateLabel = (label: string, color: string) => {
     systemStore.addLabel(label, color, issueSystemId ?? "");
+    setIssueSystemId("");
+  };
+
+  const handleDeleteLabel = () => {
+    setDeleteLabel(false);
+    systemStore.deleteLabel(labelName, issueSystemId ?? "");
+  };
+
+  const handleUpdateIssueOnGithub = (repo?: string) => {
+    if (!selectedIssue) return;
+    if (!repo) {
+      issueStore.updateIssueOnGithub(
+        githubStore.accessToken ?? "",
+        selectedIssue,
+        repositoryName,
+        githubStore.user?.username ?? ""
+      );
+    } else {
+      issueStore.createIssueFromSystem(
+        githubStore.accessToken ?? "",
+        selectedIssue,
+        repo,
+        githubStore.user?.username ?? ""
+      );
+    }
+    setRepositoryName("");
+    setUpdateIssueOnGithub(false);
   };
 
   return (
@@ -76,7 +118,7 @@ const SystemIssues = () => {
                     issue.labels.map((label, index) => (
                       <styled.Label
                         onClick={() =>
-                          handleOpenDelete(label.name, issue.issue_number)
+                          handleOpenDelete(label.name, issue.issueSystemId)
                         }
                         color={label.color}
                         key={index}
@@ -91,9 +133,7 @@ const SystemIssues = () => {
                   >
                     Add Label
                   </styled.Button>
-                  <styled.Button
-                    onClick={() => handleOpenAddToSystemDialog(issue)}
-                  >
+                  <styled.Button onClick={() => handleUpdateOnGithub(issue)}>
                     Update on Github
                   </styled.Button>
                 </styled.Buttons>
@@ -107,19 +147,20 @@ const SystemIssues = () => {
           </styled.NoIssues>
         )}
       </styled.HomeContainer>
-      {/* {deleteLabel && (
+
+      {updateIssueOnGithub && (
+        <UpdateIssueOnGithubDialog
+          onClose={() => setUpdateIssueOnGithub(false)}
+          onSubmit={handleUpdateIssueOnGithub}
+          isUpdate={!repositoryName}
+        />
+      )}
+      {deleteLabel && (
         <DeleteLabelDialog
           onClose={() => setDeleteLabel(false)}
           onSubmit={handleDeleteLabel}
         />
       )}
-      
-      {addIssueToSystem && (
-        <AddIssueToSystemDialog
-          onClose={() => setAddIssueToSystem(false)}
-          onSubmit={handleAddIssueToSystem}
-        />
-      )} */}
       {labelDialog && (
         <CreateLabelDialog
           onClose={() => setLabelDialog(false)}

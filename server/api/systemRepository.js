@@ -22,4 +22,11 @@ module.exports = (app) => {
     const user = await systemService.createLabel(issueSystemId, label);
     res.send(user);
   });
+  //
+
+  app.post("/api/issues/label/delete/system", async (req, res) => {
+    const { label, issueSystemId } = req.body;
+    const user = await systemService.deleteLabel(issueSystemId, label);
+    res.send(user);
+  });
 };
