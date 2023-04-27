@@ -7,7 +7,7 @@ export const Container = styled.div`
   justify-content: space-between;
   position: fixed;
   bottom: 0;
-  background: #0163bf;
+  background-color: #31473a;
   z-index: 5;
 `;
 
@@ -28,6 +28,7 @@ export const FooterContainer = styled.footer`
 export const HomeButton = styled.button`
   padding: 5px 10px;
   font-size: 15px;
+  font-weight: 700;
   background: transparent;
   border: 1px solid white;
 
@@ -37,6 +38,6 @@ export const HomeButton = styled.button`
   margin: 10px 10px;
 
   :hover {
-    background-color: #013b72;
+    background-color: #99b5ab;
   }
 `;

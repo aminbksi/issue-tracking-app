@@ -93,7 +93,7 @@ const SystemIssues = () => {
     <>
       <div>
         <styled.Tab>
-          All the issues in the system
+          <div>All the issues in the system</div>
           <styled.Buttons>
             <styled.TopButton onClick={() => setOpenCreateIssueDialog(true)}>
               Create an Issue
@@ -164,7 +164,9 @@ const SystemIssues = () => {
       {labelDialog && (
         <CreateLabelDialog
           onClose={() => setLabelDialog(false)}
-          onSubmit={(label, color) => handleCreateLabel(label, color ?? "")}
+          onSubmit={(label, color) =>
+            handleCreateLabel(label, color ? color : "ededed")
+          }
           isColor
         />
       )}

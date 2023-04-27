@@ -14,7 +14,7 @@ export const DialogOverlay = styled.div`
 `;
 
 export const DialogContent = styled.div`
-  background-color: #fff;
+  background-color: #edf4f2;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -29,6 +29,7 @@ export const Input = styled.input`
   font-size: 16px;
   border: none;
   border-bottom: 2px solid #ccc;
+  background-color: transparent;
 
   &:focus {
     outline: none;
@@ -38,7 +39,7 @@ export const Input = styled.input`
 
 export const DeleteButton = styled.button`
   padding: 10px 20px;
-  background-color: red;
+  background-color: #c21616;
   border: none;
   border-radius: 8px;
   font-size: 16px;

@@ -4,7 +4,7 @@ export const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  padding: 20px;
+  padding: 10px 400px 20px;
 `;
 
 export const Tab = styled.div`
@@ -15,6 +15,8 @@ export const Tab = styled.div`
   background-color: #6da1c9;
   color: black;
   font-size: 20px;
+  margin: 5px 10px 10px;
+  padding: 0 20px;
   font-weight: 700; /* bold */
 `;
 
@@ -27,12 +29,12 @@ export const IssueContainer = styled.div`
 export const IssueCard = styled.div`
   display: flex;
   flex-direction: column;
-  //   align-items: center;
   padding: 20px;
-  background-color: #fff;
+  background-color: #99b5ab;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease-in-out;
+  border: 1px solid #31473a;
 
   &:hover {
     transform: translateY(-4px);
@@ -64,24 +66,26 @@ export const Label = styled.span<{ color?: string }>`
 `;
 
 export const StateLabel = styled(Label)<{ type?: string }>`
-  background-color: ${(props) => (props.type !== "open" ? "#dc3545" : "green")};
+  background-color: ${(props) =>
+    props.type !== "open" ? "#dc3545" : "#31473A"};
   color: #fff;
 `;
 
 export const Button = styled.button`
   padding: 8px 8px;
   font-size: 13px;
+  font-weight: 700;
   line-height: 1;
-  background: #648eb7;
-  border: 1px solid gray;
+  background-color: transparent;
+  border: 1px solid #31473a;
 
-  color: white;
+  color: black;
   cursor: pointer;
   border-radius: 8px;
   margin: 0 10px;
 
   :hover {
-    background: #035199;
+    background: #7c8363;
   }
 `;
 
